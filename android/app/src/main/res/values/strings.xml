@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Mealme</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">No Logueado</string>
+    <string name="nav_header_subtitle">-</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_login">Login</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_search">Buscar Restaurants</string>
+    <string name="menu_favorite">Favoritos</string>
+</resources>
