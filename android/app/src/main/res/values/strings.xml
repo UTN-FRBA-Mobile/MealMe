@@ -1,13 +1,22 @@
 <resources>
     <string name="app_name">Mealme</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">No Logueado</string>
+    <string name="navigation_drawer_open">Abrir Menú</string>
+    <string name="navigation_drawer_close">Cerrar Menú</string>
+    <string name="nav_header_title">No Logeado</string>
     <string name="nav_header_subtitle">-</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_login">Login</string>
 
     <string name="menu_home">Home</string>
-    <string name="menu_search">Buscar Restaurants</string>
+    <string name="menu_search">Buscar Restaurantes</string>
     <string name="menu_favorite">Favoritos</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email o Usuario</string>
+    <string name="prompt_password">Contraseña</string>
+    <string name="action_sign_in">Login</string>
+    <string name="action_sign_in_short">Login</string>
+    <string name="welcome">"Bienvenido!"</string>
+    <string name="invalid_username">No es un usuario válido</string>
+    <string name="invalid_password">La contraseña debe tener más de 5 caracteres</string>
+    <string name="login_failed">"Falló el Login"</string>
 </resources>

@@ -1,13 +1,13 @@
-package com.android.mealme.ui.gallery
+package com.android.mealme.ui.favorite
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class SearchViewModel : ViewModel() {
+class FavoriteViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "Fragment para realizar una busqueda de restaurante"
+        value = "Fragment para ver un listado de restaurantes favoritos"
     }
     val text: LiveData<String> = _text
 }

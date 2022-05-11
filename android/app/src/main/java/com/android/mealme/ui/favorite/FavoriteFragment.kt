@@ -1,4 +1,4 @@
-package com.android.mealme.ui.slideshow
+package com.android.mealme.ui.favorite
 
 import android.os.Bundle
 import android.view.LayoutInflater

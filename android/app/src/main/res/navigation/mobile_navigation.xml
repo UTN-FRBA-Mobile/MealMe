@@ -12,14 +12,20 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.android.mealme.ui.gallery.SearchFragment"
+        android:id="@+id/nav_search"
+        android:name="com.android.mealme.ui.search.SearchFragment"
         android:label="@string/menu_search"
         tools:layout="@layout/fragment_search" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.android.mealme.ui.slideshow.FavoriteFragment"
+        android:id="@+id/nav_favorite"
+        android:name="com.android.mealme.ui.favorite.FavoriteFragment"
         android:label="@string/menu_favorite"
         tools:layout="@layout/fragment_favorite" />
+
+    <fragment
+        android:id="@+id/nav_login"
+        android:name="com.android.mealme.ui.login.LoginFragment"
+        android:label="@string/action_login"
+        tools:layout="@layout/fragment_login" />
 </navigation>

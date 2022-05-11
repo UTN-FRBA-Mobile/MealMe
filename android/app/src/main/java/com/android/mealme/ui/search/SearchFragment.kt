@@ -1,4 +1,4 @@
-package com.android.mealme.ui.gallery
+package com.android.mealme.ui.search
 
 import android.os.Bundle
 import android.view.LayoutInflater
