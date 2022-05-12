@@ -1,9 +1,5 @@
 package com.android.mealme.ui.login
 
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.annotation.StringRes
-import androidx.fragment.app.Fragment
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,19 +7,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ProgressBar
 import android.widget.Toast
-import com.android.mealme.databinding.FragmentLoginBinding
-
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.android.mealme.R
+import com.android.mealme.databinding.FragmentLoginBinding
+import androidx.navigation.fragment.findNavController
 
 class LoginFragment : Fragment() {
 
     private lateinit var loginViewModel: LoginViewModel
-    private var _binding: FragmentLoginBinding? = null
-
+private var _binding: FragmentLoginBinding? = null
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -33,9 +30,9 @@ class LoginFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        _binding = FragmentLoginBinding.inflate(inflater, container, false)
-        return binding.root
+        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
+      _binding = FragmentLoginBinding.inflate(inflater, container, false)
+      return binding.root
 
     }
 
@@ -109,6 +106,8 @@ class LoginFragment : Fragment() {
                 usernameEditText.text.toString(),
                 passwordEditText.text.toString()
             )
+            val navController = findNavController()
+            navController.navigate(R.id.nav_home)
         }
     }
 
@@ -124,7 +123,9 @@ class LoginFragment : Fragment() {
         Toast.makeText(appContext, errorString, Toast.LENGTH_LONG).show()
     }
 
-    override fun onDestroyView() {
+override fun onDestroyView()
+{
+    (activity as AppCompatActivity?)!!.supportActionBar!!.show()
         super.onDestroyView()
         _binding = null
     }
