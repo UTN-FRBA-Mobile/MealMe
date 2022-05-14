@@ -14,9 +14,16 @@
         <entry key="..\:/Users/Franco/repositorios/MealMe/android/app/src/main/res/layout/app_bar_main.xml" value="0.1" />
         <entry key="..\:/Users/Franco/repositorios/MealMe/android/app/src/main/res/layout/content_main.xml" value="0.2" />
         <entry key="..\:/Users/Franco/repositorios/MealMe/android/app/src/main/res/layout/fragment_favorite.xml" value="0.259375" />
-        <entry key="..\:/Users/Franco/repositorios/MealMe/android/app/src/main/res/layout/fragment_home.xml" value="0.152" />
+        <entry key="..\:/Users/Franco/repositorios/MealMe/android/app/src/main/res/layout/fragment_home.xml" value="0.176" />
         <entry key="..\:/Users/Franco/repositorios/MealMe/android/app/src/main/res/layout/fragment_login.xml" value="0.16" />
         <entry key="..\:/Users/Franco/repositorios/MealMe/android/app/src/main/res/layout/fragment_search.xml" value="0.12129629629629629" />
+        <entry key="..\:/Users/Franco/repositorios/MealMe/android/app/src/main/res/layout/fragment_status_update.xml" value="0.10036496350364964" />
+        <entry key="..\:/Users/Franco/repositorios/MealMe/android/app/src/main/res/layout/item_color.xml" value="0.1" />
+        <entry key="..\:/Users/Franco/repositorios/MealMe/android/app/src/main/res/layout/item_footer.xml" value="0.259375" />
+        <entry key="..\:/Users/Franco/repositorios/MealMe/android/app/src/main/res/layout/item_header.xml" value="0.4" />
+        <entry key="..\:/Users/Franco/repositorios/MealMe/android/app/src/main/res/layout/item_image.xml" value="0.2698412698412698" />
+        <entry key="..\:/Users/Franco/repositorios/MealMe/android/app/src/main/res/layout/item_post.xml" value="0.259375" />
+        <entry key="..\:/Users/Franco/repositorios/MealMe/android/app/src/main/res/layout/item_profile.xml" value="0.259375" />
         <entry key="..\:/Users/Franco/repositorios/MealMe/android/app/src/main/res/layout/nav_header_main.xml" value="0.2" />
         <entry key="..\:/Users/Franco/repositorios/MealMe/android/app/src/main/res/menu/activity_main_drawer.xml" value="0.23401360544217686" />
         <entry key="..\:/Users/Franco/repositorios/MealMe/android/app/src/main/res/menu/main.xml" value="0.264" />
