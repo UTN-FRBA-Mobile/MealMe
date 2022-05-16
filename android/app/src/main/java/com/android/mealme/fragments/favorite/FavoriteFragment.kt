@@ -1,4 +1,4 @@
-package com.android.mealme.ui.favorite
+package com.android.mealme.fragments.favorite
 
 import android.os.Bundle
 import android.view.LayoutInflater

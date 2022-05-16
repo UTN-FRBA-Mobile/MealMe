@@ -6,6 +6,7 @@
     <string name="nav_header_subtitle">-</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_login">Login</string>
+    <string name="action_logout">Salir</string>
 
     <string name="menu_home">Home</string>
     <string name="menu_search">Buscar Restaurantes</string>
@@ -19,4 +20,10 @@
     <string name="invalid_username">No es un usuario válido</string>
     <string name="invalid_password">La contraseña debe tener más de 5 caracteres</string>
     <string name="login_failed">"Falló el Login"</string>
+    <string name="login_register">"Registrarse"</string>
+    <!--  REGISTER STRINGS  -->
+    <string name="register_action">"Registrarse"</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

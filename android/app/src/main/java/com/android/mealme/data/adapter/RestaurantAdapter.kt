@@ -1,18 +1,14 @@
 package com.android.mealme.data.adapter
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.android.mealme.R
 import com.android.mealme.data.model.RestaurantModel
-import com.android.mealme.ui.home.HomeFragment
-
-import com.squareup.picasso.Picasso
+import com.android.mealme.fragments.home.HomeFragment
 
 class RestaurantAdapter (private val listener: HomeFragment.OnFragmentInteractionListener?): RecyclerView.Adapter<RestaurantAdapter.ViewHolder>() {
     private var _restaurants: List<RestaurantModel> = emptyList()

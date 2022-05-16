@@ -4,7 +4,7 @@
     style="@style/item"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context="com.android.mealme.ui.home.HomeFragment">
+    tools:context="com.android.mealme.fragments.home.HomeFragment">
     <Button android:id="@+id/postButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
