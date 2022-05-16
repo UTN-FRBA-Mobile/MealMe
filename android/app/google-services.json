@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "34244533685",
+    "project_id": "mealme-utn",
+    "storage_bucket": "mealme-utn.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:34244533685:android:034bed10e6ed9318a98dfc",
+        "android_client_info": {
+          "package_name": "com.android.mealme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "34244533685-d62h85v4ig267eq3abtlnrcmspd4hj7t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAadP1Qfg2NHMnGRoA2W3IuCaVkSBZRC3s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "34244533685-d62h85v4ig267eq3abtlnrcmspd4hj7t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

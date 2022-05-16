@@ -1,13 +1,13 @@
-package com.android.mealme.ui.home
+package com.android.mealme.fragments.favorite
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class HomeViewModel : ViewModel() {
+class FavoriteViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "Home con listado de restaurantes cercanos y últimos visitados"
+        value = "Fragment para ver un listado de restaurantes favoritos"
     }
     val text: LiveData<String> = _text
 }
