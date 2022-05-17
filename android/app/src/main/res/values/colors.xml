@@ -9,4 +9,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="backdrop">#66000000</color>
+    <color name="grayFont">#CC000000</color>
+
+    <color name="lightGray">#F8F8F8</color>
 </resources>

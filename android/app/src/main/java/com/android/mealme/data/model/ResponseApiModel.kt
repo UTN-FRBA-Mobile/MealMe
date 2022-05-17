@@ -1,3 +1,3 @@
 package com.android.mealme.data.model
 
-data class ResponseApiModel(val restaurants: List<RestaurantModel>)
+data class ResponseApiModel(val restaurants: List<Restaurant>)

@@ -33,10 +33,15 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/fragment_login2.xml" value="0.3619791666666667" />
         <entry key="app/src/main/res/layout/fragment_register.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/fragment_status_update.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/item_footer.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/item_image.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/item_restaurant.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/item_simple.xml" value="0.19479166666666667" />
         <entry key="app/src/main/res/layout/nav_header_main.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/menu/activity_main_drawer.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/menu/main.xml" value="0.37604166666666666" />

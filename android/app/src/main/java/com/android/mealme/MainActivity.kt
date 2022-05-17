@@ -53,9 +53,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.nav_login, R.id.nav_home, R.id.nav_search, R.id.nav_favorite
-            ), drawerLayout
+            setOf(R.id.nav_home, R.id.nav_search, R.id.nav_favorite), drawerLayout
         )
 
 
@@ -108,14 +106,18 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         arguments: Bundle?
     ) {
         val destinationClassName = (controller.currentDestination as FragmentNavigator.Destination).className
+        val loginItem =  binding.navView.menu.findItem(R.id.action_login)
         when(destinationClassName){
-            "com.android.mealme.ui.login.LoginFragment" -> {
-                supportActionBar?.hide()
+            "com.android.mealme.fragments.home.RegisterFragment",
+            "com.android.mealme.fragments.login.LoginFragment" -> {
+                loginItem?.isVisible = false
             }
+            "com.android.mealme.fragments.home.HomeFragment" -> {}
             else -> {
                 supportActionBar?.show()
             }
         }
+        loginItem?.isVisible = true
     }
 
     private fun navigate(idRes: Int){
