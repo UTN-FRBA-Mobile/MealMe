@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -47,10 +48,10 @@ class RegisterFragment : Fragment() {
         var password = binding.registerPassword
         loader = binding.registerLoader
 
-        email.addTextChangedListener { _email ->
+        email.editText?.doAfterTextChanged { _email ->
             viewModel.setEmail(_email.toString())
         }
-        password.addTextChangedListener { _password ->
+        password.editText?.doAfterTextChanged { _password ->
             viewModel.setPassword(_password.toString())
         }
 
