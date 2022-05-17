@@ -55,24 +55,17 @@ class RegisterFragment : Fragment() {
         }
 
         viewModel.isLoading.observe(activity as MainActivity, Observer { loading ->
-            if(loading){
-                loader.visibility = LinearLayout.VISIBLE
-            }else {
-                loader.visibility = LinearLayout.GONE
-            }
+            loader.visibility = if(loading){LinearLayout.VISIBLE} else {LinearLayout.GONE}
 
         })
 
-        binding.registerActionButton.setOnClickListener {
-            register()
-        }
+        binding.registerActionButton.setOnClickListener { register() }
     }
 
     fun register() {
         loader.visibility = LinearLayout.VISIBLE
         viewModel.register(activity as MainActivity)?.addOnSuccessListener {
             findNavController().popBackStack()
-//            findNavController()?.navigate(R.id.nav_home)
         }
     }
 
