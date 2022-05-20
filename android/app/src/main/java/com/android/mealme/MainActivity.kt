@@ -63,11 +63,12 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         addAuthListenner()
 
         navView.menu.findItem(R.id.nav_home)?.setChecked(true)
-        navView.menu.findItem(R.id.drawer_logout).setOnMenuItemClickListener {
+        navView.menu.findItem(R.id.nav_logout).setOnMenuItemClickListener {
             navView.menu.close()
             if(firebaseAuth.currentUser != null) firebaseAuth.signOut()
-            return@setOnMenuItemClickListener true
+            true
         }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -109,7 +110,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         when(destinationClassName){
             "com.android.mealme.fragments.home.RegisterFragment",
             "com.android.mealme.fragments.login.LoginFragment" -> {
-                binding.appBarMain.toolbar.menu.findItem(R.id.action_login).isVisible = false
+                binding.appBarMain.toolbar.menu.findItem(R.id.action_login)?.isVisible = false
             }
 //            "com.android.mealme.fragments.home.HomeFragment" -> {}
             else -> {
@@ -132,10 +133,8 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 loginItem?.isVisible = authState.currentUser == null
 
                 val navViewMenu = binding.navView.menu
-                navViewMenu.findItem(R.id.drawer_logout).setVisible(authState.currentUser != null)
+                navViewMenu.findItem(R.id.nav_logout).setVisible(authState.currentUser != null)
                 navViewMenu.findItem(R.id.nav_login).setVisible(authState.currentUser == null)
-
-
             }
 
         }
