@@ -20,10 +20,10 @@
             android:title="@string/menu_favorite" />
         <item
             android:id="@+id/nav_login"
-            android:icon="@drawable/ic_menu_login"
+            android:icon="@drawable/ic_menu_person"
             android:title="@string/action_login" />
         <item
-            android:id="@+id/drawer_logout"
+            android:id="@+id/nav_logout"
             android:icon="@drawable/ic_menu_login"
             android:title="@string/action_logout"
             android:visible="false"
