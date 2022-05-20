@@ -106,18 +106,17 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         arguments: Bundle?
     ) {
         val destinationClassName = (controller.currentDestination as FragmentNavigator.Destination).className
-        val loginItem =  binding.navView.menu.findItem(R.id.action_login)
         when(destinationClassName){
             "com.android.mealme.fragments.home.RegisterFragment",
             "com.android.mealme.fragments.login.LoginFragment" -> {
-                loginItem?.isVisible = false
+                binding.appBarMain.toolbar.menu.findItem(R.id.action_login).isVisible = false
             }
-            "com.android.mealme.fragments.home.HomeFragment" -> {}
+//            "com.android.mealme.fragments.home.HomeFragment" -> {}
             else -> {
-                supportActionBar?.show()
+                binding.appBarMain.toolbar.menu.findItem(R.id.action_login)?.isVisible = true
             }
         }
-        loginItem?.isVisible = true
+
     }
 
     private fun navigate(idRes: Int){

@@ -23,6 +23,7 @@
     <string name="login_register">"Registrarse"</string>
     <!--  REGISTER STRINGS  -->
     <string name="register_action">"Registrarse"</string>
+    <string name="dontHaveAccount">"Todavía no tenes cuenta"</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

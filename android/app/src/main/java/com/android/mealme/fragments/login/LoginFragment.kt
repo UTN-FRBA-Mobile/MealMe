@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.android.mealme.MainActivity
@@ -31,7 +32,7 @@ class LoginFragment : Fragment() {
             binding.loading.visibility = if(isLoading == true) ProgressBar.VISIBLE else ProgressBar.VISIBLE
         }
 
-        binding.username.addTextChangedListener {
+        binding.username.editText?.doAfterTextChanged {
             viewModel.email.value = it.toString()
             val passwordValue: String = try { viewModel.password.value!! } catch (e: Exception){ "" }
             if(it.toString().isEmpty() && passwordValue.isEmpty()){
@@ -40,7 +41,7 @@ class LoginFragment : Fragment() {
                 binding.login.setEnabled(true)
             }
         }
-        binding.password.addTextChangedListener {
+        binding.username.editText?.doAfterTextChanged {
             viewModel.password.value = it.toString()
 
             val emailValue = try { viewModel.email.value!! } catch (e: Exception){ "" }
