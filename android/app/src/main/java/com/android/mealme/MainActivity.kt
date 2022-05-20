@@ -3,6 +3,7 @@ package com.android.mealme
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
@@ -131,6 +132,13 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             if(menu != null){
                 val loginItem = menu.findItem(R.id.action_login)
                 loginItem?.isVisible = authState.currentUser == null
+
+                val navView: NavigationView = binding.navView
+                val textView = findViewById<TextView>(R.id.emailUser)
+                if(textView != null){
+                    if(authState.currentUser == null) textView.text = "-"
+                    else textView.text = authState?.currentUser?.email
+                }
 
                 val navViewMenu = binding.navView.menu
                 navViewMenu.findItem(R.id.nav_logout).setVisible(authState.currentUser != null)
