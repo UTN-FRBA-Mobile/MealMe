@@ -12,6 +12,7 @@ import com.google.firebase.ktx.Firebase
 class RegisterViewModel : ViewModel() {
     private val email = MutableLiveData<String>()
     private val password = MutableLiveData<String>()
+    private val repeatPassword = MutableLiveData<String>()
 
     val isLoading = MutableLiveData<Boolean>()
 
@@ -20,6 +21,9 @@ class RegisterViewModel : ViewModel() {
     }
     fun setPassword(text: String){
         password.value = text
+    }
+    fun setRepeatPassword(text: String){
+        repeatPassword.value = text
     }
 
     fun register(ctx: Context): Task<AuthResult>? {
@@ -39,5 +43,9 @@ class RegisterViewModel : ViewModel() {
 
         Toast.makeText(ctx, "Hay que llenar todos los campos para registrarse", Toast.LENGTH_LONG).show()
         return null
+    }
+
+    fun validatePasswordRepeat(): Boolean {
+        return password.value.equals(repeatPassword.value)
     }
 }

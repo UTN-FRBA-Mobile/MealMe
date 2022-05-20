@@ -58,12 +58,12 @@
     <fragment
         android:id="@+id/nav_register"
         android:name="com.android.mealme.fragments.register.RegisterFragment"
-        android:label="fragment_register"
+        android:label="@string/menu_register"
         tools:layout="@layout/fragment_register" />
     <fragment
         android:id="@+id/restaurantDetailFragment"
         android:name="com.android.mealme.fragments.restaurantDetail.RestaurantDetailFragment"
-        android:label="fragment_restaurant_detail"
+        android:label="@string/menu_detail"
         tools:layout="@layout/fragment_restaurant_detail" />
 
 </navigation>

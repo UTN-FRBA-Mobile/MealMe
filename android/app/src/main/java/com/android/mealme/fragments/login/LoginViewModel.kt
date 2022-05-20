@@ -43,4 +43,11 @@ class LoginViewModel: ViewModel() {
         }
         return null
     }
+
+    fun enableLogin(): Boolean {
+        if(email.value.isNullOrEmpty() || password.value.isNullOrBlank()){
+            return false;
+        }
+        return true
+    }
 }

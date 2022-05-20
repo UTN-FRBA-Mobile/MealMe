@@ -1,6 +1,8 @@
 package com.android.mealme.fragments.login
 
 import android.os.Bundle
+import android.text.TextUtils
+import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -32,24 +34,18 @@ class LoginFragment : Fragment() {
             binding.loading.visibility = if(isLoading == true) ProgressBar.VISIBLE else ProgressBar.VISIBLE
         }
 
-        binding.username.editText?.doAfterTextChanged {
+        binding.email.editText?.doAfterTextChanged {
             viewModel.email.value = it.toString()
-            val passwordValue: String = try { viewModel.password.value!! } catch (e: Exception){ "" }
-            if(it.toString().isEmpty() && passwordValue.isEmpty()){
-                binding.login.setEnabled(false)
-            }else if(it.toString().isNotEmpty()){
-                binding.login.setEnabled(true)
-            }
-        }
-        binding.username.editText?.doAfterTextChanged {
-            viewModel.password.value = it.toString()
+            if(!isValidEmail(it))
+                binding.email.error = getResources().getString(R.string.errorEmail)
+            else
+                binding.email.error = ""
 
-            val emailValue = try { viewModel.email.value!! } catch (e: Exception){ "" }
-            if(it.toString().isEmpty() && emailValue.isEmpty() ){
-                binding.login.setEnabled(false)
-            }else if(it.toString().isNotEmpty()){
-                binding.login.setEnabled(true)
-            }
+            binding.login.setEnabled(viewModel.enableLogin())
+        }
+        binding.password.editText?.doAfterTextChanged {
+            viewModel.password.value = it.toString()
+            binding.login.setEnabled(viewModel.enableLogin())
         }
 
         binding.login.setOnClickListener {
@@ -68,5 +64,13 @@ class LoginFragment : Fragment() {
     companion object {
         @JvmStatic
         fun newInstance() = LoginFragment()
+    }
+
+    fun isValidEmail(target: CharSequence?): Boolean {
+        return if (TextUtils.isEmpty(target)) {
+            false
+        } else {
+            Patterns.EMAIL_ADDRESS.matcher(target).matches()
+        }
     }
 }
