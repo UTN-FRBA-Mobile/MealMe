@@ -1,21 +1,25 @@
 package com.android.mealme.fragments.register
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.text.TextUtils
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.core.widget.addTextChangedListener
+import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.android.mealme.MainActivity
+import com.android.mealme.R
 import com.android.mealme.databinding.FragmentRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+
 
 class RegisterFragment : Fragment() {
     private lateinit var firebaseAuth: FirebaseAuth
@@ -38,6 +42,10 @@ class RegisterFragment : Fragment() {
     ): View? {
         _binding = FragmentRegisterBinding.inflate(inflater, container, false)
 
+        binding.loginButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         return binding.root
     }
 
@@ -46,13 +54,32 @@ class RegisterFragment : Fragment() {
 
         var email = binding.registerEmail
         var password = binding.registerPassword
+        var repeat = binding.repeatPassword
         loader = binding.registerLoader
 
+        var progress = 0
         email.editText?.doAfterTextChanged { _email ->
             viewModel.setEmail(_email.toString())
+            if(!isValidEmail(_email))
+                email.error = getResources().getString(R.string.errorEmail)
+            else
+                email.error = ""
+
         }
         password.editText?.doAfterTextChanged { _password ->
             viewModel.setPassword(_password.toString())
+            if(_password.toString().isNullOrEmpty())
+                password.error = getResources().getString(R.string.errorPassword)
+            else
+                password.error = ""
+        }
+        repeat.editText?.doAfterTextChanged { _repeat ->
+            viewModel.setRepeatPassword(_repeat.toString())
+            if(!(password.editText?.text.toString().equals(_repeat.toString()))!!)
+                repeat.error = getResources().getString(R.string.errorRepeat)
+            else
+                repeat.error = ""
+
         }
 
         viewModel.isLoading.observe(activity as MainActivity, Observer { loading ->
@@ -64,14 +91,26 @@ class RegisterFragment : Fragment() {
     }
 
     fun register() {
-        loader.visibility = LinearLayout.VISIBLE
-        viewModel.register(activity as MainActivity)?.addOnSuccessListener {
-            findNavController().popBackStack()
+        if(viewModel.validatePasswordRepeat()){
+            loader.visibility = LinearLayout.VISIBLE
+            viewModel.register(activity as MainActivity)?.addOnSuccessListener {
+                findNavController().popBackStack()
+            }
+        }else{
+            Toast.makeText(activity, "La contraseñas ingresadas deben ser iguales", Toast.LENGTH_SHORT).show()
         }
     }
 
     companion object {
         @JvmStatic
         fun newInstance() = RegisterFragment()
+    }
+
+    fun isValidEmail(target: CharSequence?): Boolean {
+        return if (TextUtils.isEmpty(target)) {
+            false
+        } else {
+            Patterns.EMAIL_ADDRESS.matcher(target).matches()
+        }
     }
 }
