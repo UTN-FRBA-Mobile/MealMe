@@ -1,5 +1,8 @@
 package com.android.mealme.data.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class RestaurantAddress(
     val street_addr: String,
     val city: String,

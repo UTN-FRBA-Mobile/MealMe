@@ -33,6 +33,10 @@
     <string name="errorPassword">Ingrese una contraseña válida</string>
     <string name="errorRepeat">Debe coincidir con la contraseña</string>
 
+    <!--  RESTAURANT DETAIL STRING  -->
+    <string name="add_review">"Agregar reseña"</string>
+    <string name="add_favorite">"Agregar favorito"</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

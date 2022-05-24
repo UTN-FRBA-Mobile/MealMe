@@ -24,4 +24,5 @@
         <item name="android:layout_weight">1</item>
         <item name="android:textSize">12sp</item>
     </style>
+
 </resources>
