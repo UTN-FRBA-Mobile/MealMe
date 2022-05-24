@@ -14,4 +14,5 @@
     <dimen name="profilePicSize">48dp</dimen>
     <dimen name="itemPadding">8dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="detail_backdrop_height">256dp</dimen>
 </resources>

@@ -64,6 +64,10 @@
         android:id="@+id/restaurantDetailFragment"
         android:name="com.android.mealme.fragments.restaurantDetail.RestaurantDetailFragment"
         android:label="@string/menu_detail"
-        tools:layout="@layout/fragment_restaurant_detail" />
+        tools:layout="@layout/fragment_restaurant_detail" >
+        <argument
+            android:name="restaurant"
+            app:argType="com.android.mealme.data.model.Restaurant" />
+    </fragment>
 
 </navigation>

@@ -8,12 +8,17 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mealme.MainActivity
 import com.android.mealme.R
 import com.android.mealme.data.adapter.RestaurantAdapter
+import com.android.mealme.data.adapter.RestaurantAdapterListener
+import com.android.mealme.data.model.Restaurant
 import com.android.mealme.databinding.FragmentHomeBinding
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
@@ -22,9 +27,13 @@ class HomeFragment : Fragment() {
 
     private val homeViewModel: HomeViewModel by viewModels()
 
-    private var restaurantAdapter: RestaurantAdapter = RestaurantAdapter(object: OnFragmentInteractionListener {
-        override fun showFragment(fragment: Fragment) {
-            // findNavController().navigate() // TODO: navigate to restaurant detail
+    private var restaurantAdapter: RestaurantAdapter = RestaurantAdapter(object: RestaurantAdapterListener {
+        override fun onPressItem(restaurant: Restaurant) {
+//            val restaurantString = Json.encodeToString(restaurant)
+            val bundle = Bundle().apply {
+                putSerializable("RESTAURANT", restaurant)
+            }
+            findNavController().navigate(R.id.action_nav_home_to_restaurantDetailFragment,bundle)
         }
     })
 
@@ -60,10 +69,6 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    interface OnFragmentInteractionListener {
-        fun showFragment(fragment: Fragment)
     }
 
 
