@@ -1,5 +1,6 @@
 package com.android.mealme.data.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.mealme.R
 import com.android.mealme.data.model.Restaurant
@@ -25,6 +27,8 @@ interface RestaurantAdapterListener {
 
 class RestaurantAdapter (private val listener: RestaurantAdapterListener): RecyclerView.Adapter<RestaurantAdapter.ViewHolder>() {
     private var _restaurants: List<Restaurant> = emptyList()
+
+
 
     override fun getItemViewType(position: Int): Int {
         return  R.layout.item_restaurant
@@ -76,5 +80,17 @@ class RestaurantAdapter (private val listener: RestaurantAdapterListener): Recyc
     fun setRestaurants(restaurants: List<Restaurant>){
         _restaurants = restaurants
         notifyDataSetChanged()
+    }
+
+    companion object {
+        fun init(list: RecyclerView ,context: Context, _listener: RestaurantAdapterListener): RestaurantAdapter {
+            val restaurantAdapter = RestaurantAdapter(_listener)
+            list.apply {
+                layoutManager = LinearLayoutManager(context)
+                adapter = restaurantAdapter
+            }
+
+            return restaurantAdapter
+        }
     }
 }

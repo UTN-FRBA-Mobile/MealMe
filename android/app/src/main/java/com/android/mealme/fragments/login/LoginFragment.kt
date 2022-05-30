@@ -55,7 +55,7 @@ class LoginFragment : Fragment() {
         }
 
         binding.login.setOnClickListener {
-            viewModel.login(activity as MainActivity)?.addOnSuccessListener {
+            viewModel.login(activity as MainActivity)?.thenApply {
                 findNavController().popBackStack()
             }
         }

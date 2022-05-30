@@ -27,15 +27,14 @@ class HomeFragment : Fragment() {
 
     private val homeViewModel: HomeViewModel by viewModels()
 
-    private var restaurantAdapter: RestaurantAdapter = RestaurantAdapter(object: RestaurantAdapterListener {
+    private var restaurantAdapterListener: RestaurantAdapterListener = object: RestaurantAdapterListener {
         override fun onPressItem(restaurant: Restaurant) {
-//            val restaurantString = Json.encodeToString(restaurant)
             val bundle = Bundle().apply {
                 putSerializable("RESTAURANT", restaurant)
             }
             findNavController().navigate(R.id.action_nav_home_to_restaurantDetailFragment,bundle)
         }
-    })
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,10 +48,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        binding.list.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = restaurantAdapter
-        }
+        val restaurantAdapter = RestaurantAdapter.init(binding.list, requireContext(), restaurantAdapterListener)
 
         homeViewModel.isLoading.observe(activity as MainActivity) {
             binding.progressBar.visibility = if(it) { View.VISIBLE } else {View.GONE}
