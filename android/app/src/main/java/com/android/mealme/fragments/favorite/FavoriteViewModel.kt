@@ -3,11 +3,11 @@ package com.android.mealme.fragments.favorite
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.android.mealme.data.controller.FavoriteController
+import com.android.mealme.data.controller.RestaurantController
+import com.android.mealme.data.model.Restaurant
 
 class FavoriteViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "Fragment para ver un listado de restaurantes favoritos"
-    }
-    val text: LiveData<String> = _text
+    val favorites = MutableLiveData<List<Restaurant>>(emptyList())
 }

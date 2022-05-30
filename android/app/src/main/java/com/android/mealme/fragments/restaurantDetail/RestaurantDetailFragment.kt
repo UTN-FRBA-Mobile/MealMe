@@ -1,13 +1,16 @@
 package com.android.mealme.fragments.restaurantDetail
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import com.android.mealme.MainActivity
 import com.android.mealme.R
 import com.android.mealme.data.adapter.MenutabAdapter
+import com.android.mealme.data.controller.FavoriteController
 import com.android.mealme.data.model.Restaurant
 import com.android.mealme.data.model.RestaurantCategory
 import com.android.mealme.databinding.FragmentRestaurantDetailBinding
@@ -38,14 +41,20 @@ class RestaurantDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentRestaurantDetailBinding.inflate(inflater, container, false)
+        // Set menu tabs view pager
+        binding.restaurantDetailMenuViewPager.adapter = menuViewPagerAdapter
 
         setToolbar()
         fillDetailContent()
         loadRestaurantImage()
         addViewModelObservers()
 
-        // Set menu tabs view pager
-        binding.restaurantDetailMenuViewPager.adapter = menuViewPagerAdapter
+        FavoriteController.instance._favorites.observe(activity as MainActivity) {
+            if (it.isNotEmpty()) {
+                viewModel.isFavorite.value =
+                    FavoriteController.instance.isRestaurantInFavorites(viewModel.restaurant?._id!!)
+            }
+        }
 
         return binding.root
     }
@@ -64,10 +73,14 @@ class RestaurantDetailFragment : Fragment() {
         super.onDestroyView()
         viewModel.isLoading.removeObservers(activity as AppCompatActivity)
         viewModel.categories.removeObservers(activity as AppCompatActivity)
+        viewModel.isFavorite.removeObservers(activity as AppCompatActivity)
+        FavoriteController.instance.isLoading.removeObservers(activity as MainActivity)
+        _binding = null
     }
 
     private fun fillDetailContent() {
-        var rating = "${numberUtils.roundOffDecimal(viewModel.restaurant?.weighted_rating_value!!)}/5 "
+        var rating =
+            "${numberUtils.roundOffDecimal(viewModel.restaurant?.weighted_rating_value!!)}/5 "
         rating += "(${viewModel.restaurant?.aggregated_rating_count})"
         binding.restaurantDetailRating.text = rating
     }
@@ -79,22 +92,45 @@ class RestaurantDetailFragment : Fragment() {
         // Set back button listener
         binding.restaurantDetailToolbar.setNavigationOnClickListener { activity?.onBackPressed() }
 
+        val favoriteButton =
+            binding.restaurantDetailToolbar.menu.findItem(R.id.detail_menu_favorite)
+
+        FavoriteController.instance.isLoading.observe(activity as MainActivity){
+            favoriteButton.isVisible = !it
+        }
         // Set favorite press listener
-        binding.restaurantDetailToolbar.menu.findItem(R.id.detail_menu_favorite).setOnMenuItemClickListener {
-            //TODO: "ADD FAVORITE IMPL"
+        viewModel.isFavorite.observe(activity as MainActivity) { isFavorite ->
+            favoriteButton.setIcon(
+                if (isFavorite) {
+                    R.drawable.ic_baseline_favorite_24
+                } else {
+                    R.drawable.ic_baseline_favorite_border_24
+                }
+            )
+        }
+
+        favoriteButton.setOnMenuItemClickListener {
+            if (!viewModel.isFavorite.value!!) {
+                viewModel.addFavorite()
+            } else {
+                viewModel.removeFavorite()
+            }
+
             true
         }
     }
 
     private fun loadRestaurantImage() {
-        Picasso.get().load(viewModel.restaurant?.logo_photos?.first()).into(binding.restaurantDetailImage, object : Callback {
-            override fun onSuccess() {
-                binding.restaurantDetailImageLoader.isVisible = false
-            }
-            override fun onError(e: Exception?) {
-                binding.restaurantDetailImageLoader.isVisible = false
-            }
-        })
+        Picasso.get().load(viewModel.restaurant?.logo_photos?.first())
+            .into(binding.restaurantDetailImage, object : Callback {
+                override fun onSuccess() {
+                    binding.restaurantDetailImageLoader.isVisible = false
+                }
+
+                override fun onError(e: Exception?) {
+                    binding.restaurantDetailImageLoader.isVisible = false
+                }
+            })
     }
 
     private fun addViewModelObservers() {
@@ -105,13 +141,16 @@ class RestaurantDetailFragment : Fragment() {
 
         viewModel.categories.observe(activity as AppCompatActivity) { categories ->
             menuViewPagerAdapter.setList(categories)
-            for (category: RestaurantCategory in categories){
-                var tab:TabLayout.Tab = binding.restaurantDetailMenuTabs.newTab()
+            for (category: RestaurantCategory in categories) {
+                var tab: TabLayout.Tab = binding.restaurantDetailMenuTabs.newTab()
                 tab.text = category.name
                 binding.restaurantDetailMenuTabs.addTab(tab)
             }
-            TabLayoutMediator(binding.restaurantDetailMenuTabs, binding.restaurantDetailMenuViewPager) {
-                    tab, position -> tab.text = viewModel.categories.value?.get(position)?.name
+            TabLayoutMediator(
+                binding.restaurantDetailMenuTabs,
+                binding.restaurantDetailMenuViewPager
+            ) { tab, position ->
+                tab.text = viewModel.categories.value?.get(position)?.name
             }.attach()
         }
     }
