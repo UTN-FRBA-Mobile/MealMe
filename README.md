@@ -18,9 +18,10 @@ Con MealMe podrás:
 	
 	3.3) Llevar un registro de los últimos Restaurantes visitados
 
-## Permisos que solicita la aplicación
+## Permisos que utiliza la aplicación
 
 * Internet
+* Ubicación
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)

@@ -39,7 +39,7 @@ class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        homeViewModel.getRestaurants()
+//        homeViewModel.getRestaurants()
     }
 
     override fun onCreateView(
@@ -58,7 +58,74 @@ class HomeFragment : Fragment() {
         }
         requireActivity().invalidateOptionsMenu()
 
+        binding.buttonClose.setOnClickListener() {
+            if (checkForPermission()) {
+                searchByGeoLocation()
+            }
+        }
+
+        if (arguments?.getSerializable("filtroGeo") != null){
+            //Viene por filtro de busqueda de dirección
+            searchByGeoLocation(arguments?.getSerializable("latitud") as Double,
+                arguments?.getSerializable("longitud") as Double)
+        }else if(arguments?.getSerializable("filtroName") != null){
+            //Viene por filtro de busqueda de nombre
+            homeViewModel.getRestaurantByName(arguments?.getSerializable("name") as String, binding!!)
+
+        }else if(checkForPermission()){
+            //Si tiene permisos de ubicación carga las más cercanas
+            searchByGeoLocation()
+        }else{
+            //Si no tiene permisos, carga la lista entera
+            homeViewModel.getRestaurants()
+        }
+
+        binding.buttonAll.setOnClickListener(){
+            homeViewModel.cleanRestaurants()
+            homeViewModel.getRestaurants()
+        }
         return binding.root
+    }
+
+    fun checkForPermission(): Boolean {
+        return Permissions.checkForPermissions(this,android.Manifest.permission.ACCESS_FINE_LOCATION,
+            PERMISSION_LOCATION_ID, resources.getString(R.string.permissionTitle))
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            PERMISSION_LOCATION_ID -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // tenemos permiso, continuar con la tarea
+                    homeViewModel.cleanRestaurants()
+                    searchByGeoLocation()
+                }
+                else {
+                    homeViewModel.getRestaurants()
+                    Toast.makeText(activity, "No se otorgaron permisos de ubicación", Toast.LENGTH_SHORT).show()
+                }
+                return
+            }
+        }
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun searchByGeoLocation() {
+        homeViewModel.isLoading.value = true;
+        var locationManager = requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        locationManager.requestLocationUpdates(
+            LocationManager.GPS_PROVIDER, 5000, 10f
+        ) { loc ->
+            searchByGeoLocation(loc.latitude, loc.longitude)
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun searchByGeoLocation(latitude: Double, longitude: Double) {
+        homeViewModel.isLoading.value = true;
+        homeViewModel.getRestaurantsByGeoLocation(latitude, longitude,binding!!)
     }
 
 
@@ -69,6 +136,7 @@ class HomeFragment : Fragment() {
 
 
     companion object {
+        const val PERMISSION_LOCATION_ID = 2
         @JvmStatic
         fun newInstance() = HomeFragment()
     }

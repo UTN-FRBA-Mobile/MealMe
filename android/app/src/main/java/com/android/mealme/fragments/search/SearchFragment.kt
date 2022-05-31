@@ -1,38 +1,26 @@
 package com.android.mealme.fragments.search
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.content.pm.PackageManager
 import android.location.*
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.android.mealme.R
-import com.android.mealme.data.utils.Permissions
 import com.android.mealme.databinding.FragmentSearchBinding
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.firestore.GeoPoint
 import java.io.IOException
 
 
 class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
-    companion object {
-        const val PERMISSION_LOCATION_ID = 2
-    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-//        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -45,59 +33,33 @@ class SearchFragment : Fragment() {
         val root: View = binding.root
 
         binding.searchByAddress.setOnClickListener(){
-            if(binding.address?.editText?.text.toString().isNullOrEmpty()){
+            val imm: InputMethodManager =
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(requireView().windowToken, 0)
+            if(binding.addressSearch?.editText?.text.toString().isNullOrEmpty() &&
+                    binding.nameSearch?.editText?.text.toString().isNullOrEmpty()){
                 Snackbar.make(activity?.findViewById(R.id.busquedaLayout)!!,
                     resources.getString(R.string.errorAddress), Snackbar.LENGTH_LONG)
                     .show();
-            }
-
-            getLocationFromAddress(binding.address?.editText?.text.toString())
-        }
-
-        binding.searchByGeo.setOnClickListener(){
-            if(Permissions.checkForPermissions(this,android.Manifest.permission.ACCESS_FINE_LOCATION,
-                    PERMISSION_LOCATION_ID, resources.getString(R.string.permissionTitle))){
-                searchByGeoLocation()
+            }else{
+                if(!binding.addressSearch?.editText?.text.toString().isNullOrEmpty()){
+                    searchByAddress(binding.addressSearch?.editText?.text.toString())
+                }else{
+                    searchByName(binding.nameSearch?.editText?.text.toString())
+                }
             }
         }
+
         return root
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            PERMISSION_LOCATION_ID -> {
-                if (grantResults.count() > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // tenemos permiso, continuar con la tarea
-                    searchByGeoLocation()
-                }
-                else {
-                    // Controlar que no nos dieron permiso, por ejemplo mostrando un Toast
-                    Toast.makeText(activity, "No hay permisos para escribir/leer imagenes", Toast.LENGTH_SHORT).show()
-                }
-                return
-            }
+    private fun searchByName(toString: String) {
+        val bundle = Bundle().apply {
+            putSerializable("filtroName", true)
+            putSerializable("name", toString)
         }
+        findNavController().navigate(R.id.action_nav_search_to_nav_home,bundle)
 
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun searchByGeoLocation() {
-        var locationRequest: LocationRequest
-
-        var locationManager = requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            val locationListener: LocationListener = MyLocationListener()
-            locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER, 5000, 10f, locationListener
-            )
-    }
-
-    class MyLocationListener : LocationListener {
-        override fun onLocationChanged(loc: Location) {
-            val longitude = loc.getLongitude()
-            val latitude = loc.getLatitude()
-            val s = "Longitude: "+ longitude + "Latitude: "+ latitude
-        }
     }
 
     override fun onDestroyView() {
@@ -106,23 +68,27 @@ class SearchFragment : Fragment() {
     }
 
 
-    fun getLocationFromAddress(strAddress: String?): GeoPoint? {
+    fun searchByAddress(strAddress: String?) {
         val coder = Geocoder(requireContext())
         val address: List<Address>?
-        var p1: GeoPoint? = null
         try {
             address = coder.getFromLocationName(strAddress, 5)
-            if (address == null) {
-                return null
-            }
-            val location: Address = address[0]
-            location.getLatitude()
-            location.getLongitude()
+            if (address == null || address.isEmpty()) {
+                Snackbar.make(activity?.findViewById(R.id.busquedaLayout)!!,
+                    resources.getString(R.string.errorAddress), Snackbar.LENGTH_LONG)
+                    .show();
+            }else{
+                val location: Address = address[0]
 
-            return p1
+                val bundle = Bundle().apply {
+                    putSerializable("filtroGeo", true)
+                    putSerializable("latitud", location.latitude)
+                    putSerializable("longitud", location.longitude)
+                }
+                findNavController().navigate(R.id.action_nav_search_to_nav_home,bundle)
+            }
         } catch (e: IOException) {
             e.printStackTrace()
         }
-        return null
     }
 }
