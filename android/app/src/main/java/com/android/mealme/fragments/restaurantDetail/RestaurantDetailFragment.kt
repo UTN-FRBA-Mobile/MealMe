@@ -1,12 +1,12 @@
 package com.android.mealme.fragments.restaurantDetail
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.android.mealme.MainActivity
 import com.android.mealme.R
 import com.android.mealme.data.adapter.MenutabAdapter
@@ -14,12 +14,10 @@ import com.android.mealme.data.controller.FavoriteController
 import com.android.mealme.data.model.Restaurant
 import com.android.mealme.data.model.RestaurantCategory
 import com.android.mealme.databinding.FragmentRestaurantDetailBinding
+import com.android.mealme.ui.RestaurantHeaderImage
 import com.android.mealme.utils.numberUtils
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.squareup.picasso.Callback
-import com.squareup.picasso.Picasso
-import java.lang.Exception
 
 class RestaurantDetailFragment : Fragment() {
 
@@ -33,7 +31,6 @@ class RestaurantDetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.setRestaurant(arguments?.getSerializable("RESTAURANT") as Restaurant)
-        menuViewPagerAdapter = MenutabAdapter(this)
     }
 
     override fun onCreateView(
@@ -42,12 +39,22 @@ class RestaurantDetailFragment : Fragment() {
     ): View? {
         _binding = FragmentRestaurantDetailBinding.inflate(inflater, container, false)
         // Set menu tabs view pager
-        binding.restaurantDetailMenuViewPager.adapter = menuViewPagerAdapter
+        menuViewPagerAdapter = MenutabAdapter(this)
+        binding.restaurantDetailMenuViewPager.apply {
+            adapter = menuViewPagerAdapter
+        }
 
         setToolbar()
         fillDetailContent()
-        loadRestaurantImage()
         addViewModelObservers()
+
+        binding.restaurantDetailAddReviewButton.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_restaurantDetailFragment_to_reviewFragment,
+                Bundle().apply {
+                    putString("restaurantId", viewModel.restaurant?._id!!)
+                })
+        }
 
         FavoriteController.instance._favorites.observe(activity as MainActivity) {
             if (it.isNotEmpty()) {
@@ -75,7 +82,6 @@ class RestaurantDetailFragment : Fragment() {
         viewModel.categories.removeObservers(activity as AppCompatActivity)
         viewModel.isFavorite.removeObservers(activity as AppCompatActivity)
         FavoriteController.instance.isLoading.removeObservers(activity as MainActivity)
-        _binding = null
     }
 
     private fun fillDetailContent() {
@@ -86,21 +92,28 @@ class RestaurantDetailFragment : Fragment() {
     }
 
     private fun setToolbar() {
-        binding.restaurantDetailToolbar.inflateMenu(R.menu.restaurant_detail_menu)
-        binding.restaurantDetailCollapsingToolbar.title = viewModel.restaurant?.name
+        val restaurantHeader: RestaurantHeaderImage =
+            binding.root.findViewById(RestaurantHeaderImage.Constants.COMPONENT_ID)
 
-        // Set back button listener
-        binding.restaurantDetailToolbar.setNavigationOnClickListener { activity?.onBackPressed() }
+        val extraHandler = object : RestaurantHeaderImage.ExtraConfigurationsHandler {
+            override fun getMenuId(): Int? = R.menu.restaurant_detail_menu
+            override fun onClickBack() = activity?.onBackPressed()
+        }
 
-        val favoriteButton =
-            binding.restaurantDetailToolbar.menu.findItem(R.id.detail_menu_favorite)
+        val toolbar = restaurantHeader.setupForIncludedCollapsible(
+            binding.root,
+            viewModel.restaurant!!,
+            extraHandler
+        )
 
-        FavoriteController.instance.isLoading.observe(activity as MainActivity){
-            favoriteButton.isVisible = !it
+
+        val favoriteButton = toolbar.menu?.findItem(R.id.detail_menu_favorite)
+        FavoriteController.instance.isLoading.observe(activity as MainActivity) {
+            favoriteButton?.isVisible = !it
         }
         // Set favorite press listener
         viewModel.isFavorite.observe(activity as MainActivity) { isFavorite ->
-            favoriteButton.setIcon(
+            favoriteButton?.setIcon(
                 if (isFavorite) {
                     R.drawable.ic_baseline_favorite_24
                 } else {
@@ -109,7 +122,7 @@ class RestaurantDetailFragment : Fragment() {
             )
         }
 
-        favoriteButton.setOnMenuItemClickListener {
+        favoriteButton?.setOnMenuItemClickListener {
             if (!viewModel.isFavorite.value!!) {
                 viewModel.addFavorite()
             } else {
@@ -118,19 +131,7 @@ class RestaurantDetailFragment : Fragment() {
 
             true
         }
-    }
 
-    private fun loadRestaurantImage() {
-        Picasso.get().load(viewModel.restaurant?.logo_photos?.first())
-            .into(binding.restaurantDetailImage, object : Callback {
-                override fun onSuccess() {
-                    binding.restaurantDetailImageLoader.isVisible = false
-                }
-
-                override fun onError(e: Exception?) {
-                    binding.restaurantDetailImageLoader.isVisible = false
-                }
-            })
     }
 
     private fun addViewModelObservers() {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,62 +8,9 @@
     android:fitsSystemWindows="true"
     tools:context=".fragments.restaurantDetail.RestaurantDetailFragment">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/restaurant_detail_appbar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/detail_backdrop_height"
-        android:fitsSystemWindows="true">
+    <include layout="@layout/collapsable_restaurant_image_toolbar"/>
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/restaurant_detail_collapsing_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleMarginEnd="26dp"
-            app:expandedTitleMarginStart="16dp"
-            app:collapsedTitleTextColor="?attr/colorOnPrimary"
-            app:expandedTitleTextColor="?attr/colorOnPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            >
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/restaurant_detail_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_centerInParent="true"
-                    android:scaleType="fitXY"
-                    android:contentDescription="resaurant_image"
-                    />
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_centerInParent="true"
-                    android:contentDescription="gradient"
-                    android:src="@drawable/black_gradient" />
-
-                <ProgressBar
-                    android:id="@+id/restaurant_detail_image_loader"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true" />
-
-            </RelativeLayout>
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/restaurant_detail_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
-                app:navigationIcon="@drawable/ic_arrow_back" />
-
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/restaurant_detail_scroll_container"
@@ -80,8 +28,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toTopOf="parent"
-                >
+                app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                     android:id="@+id/restaurant_detail_rating"
@@ -91,11 +38,11 @@
                 <Button
                     android:id="@+id/restaurant_detail_add_review_button"
                     style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:textColor="?attr/colorPrimaryVariant"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/add_review"
-                    android:textAllCaps="false" />
+                    android:textAllCaps="false"
+                    android:textColor="?attr/colorPrimaryVariant" />
             </LinearLayout>
 
             <RelativeLayout
@@ -122,8 +69,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/restaurant_detail_map_container"
-                app:tabMode="scrollable"
-                />
+                app:tabMode="scrollable" />
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/restaurant_detail_menu_view_pager"
