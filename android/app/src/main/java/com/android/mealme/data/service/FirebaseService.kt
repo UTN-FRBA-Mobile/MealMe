@@ -1,5 +1,7 @@
 package com.android.mealme.data.service
 
+import android.annotation.SuppressLint
+import com.android.mealme.data.model.RestaurantReview
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
@@ -59,6 +61,26 @@ class FirebaseService {
         return null;
     }
 
+    fun getReviews(restaurantId: String): CompletableFuture<List<RestaurantReview>> {
+        val future = CompletableFuture<List<RestaurantReview>>()
+        database.getReference("reviews").child(restaurantId).get().addOnCompleteListener {
+            if(it.isSuccessful){
+
+            }
+            future.complete(emptyList())
+        }
+        return future
+    }
+
+    fun addReview(restaurantId: String, review: RestaurantReview): CompletableFuture<String> {
+        val future = CompletableFuture<String>()
+        val reference = database.getReference("reviews").child(restaurantId)
+        val newData = reference.push()
+        newData.setValue(review).addOnCompleteListener {
+            future.complete(if(it.isSuccessful) {newData.key} else null)
+        }
+        return future
+    }
 
     companion object {
         val instance = FirebaseService()
