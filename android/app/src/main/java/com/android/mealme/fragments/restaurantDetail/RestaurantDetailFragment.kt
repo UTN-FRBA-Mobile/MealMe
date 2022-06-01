@@ -52,9 +52,14 @@ class RestaurantDetailFragment : Fragment() {
         binding.restaurantDetailAddReviewButton.setOnClickListener {
             findNavController().navigate(
                 R.id.action_restaurantDetailFragment_to_reviewFragment,
-                Bundle().apply {
-                    putString("restaurantId", viewModel.restaurant?._id!!)
-                })
+                Bundle().apply { putString("restaurantId", viewModel.restaurant?._id!!) })
+        }
+
+        binding.restaurantDetailRating.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_restaurantDetailFragment_to_reviewListFragment,
+                Bundle().apply { putString("restaurantId", viewModel.restaurant?._id!!) }
+            )
         }
 
         FavoriteController.instance._favorites.observe(activity as MainActivity) {

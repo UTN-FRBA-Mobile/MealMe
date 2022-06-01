@@ -26,8 +26,8 @@
     <fragment
         android:id="@+id/nav_home"
         android:name="com.android.mealme.fragments.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" >
+        android:label="MealMe"
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_nav_home_to_nav_login"
             app:destination="@id/nav_login"
@@ -85,11 +85,20 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpTo="@id/restaurantDetailFragment" />
+        <action
+            android:id="@+id/action_restaurantDetailFragment_to_reviewListFragment"
+            app:destination="@id/reviewListFragment"
+            app:popUpTo="@id/restaurantDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/reviewFragment"
         android:name="com.android.mealme.fragments.review.ReviewFragment"
         android:label="fragment_review"
         tools:layout="@layout/fragment_review" />
+    <fragment
+        android:id="@+id/reviewListFragment"
+        android:name="com.android.mealme.fragments.reviewList.ReviewListFragment"
+        android:label="Reseñas"
+        tools:layout="@layout/fragment_review_list" />
 
 </navigation>

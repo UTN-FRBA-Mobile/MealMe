@@ -16,22 +16,22 @@ import kotlin.collections.HashMap
 
 class FirebaseService {
     private val auth: FirebaseAuth = Firebase.auth
-    private val database: FirebaseDatabase  = FirebaseDatabase.getInstance()
+    private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
 
     val userId get() = auth.currentUser?.uid
 
     fun getFavorites(): CompletableFuture<List<Restaurant>> {
         val completableFuture: CompletableFuture<List<Restaurant>> = CompletableFuture()
-        if(userId != null){
+        if (userId != null) {
 
             database.getReference("favorites/$userId").get()
                 .addOnSuccessListener { snapshot ->
-                    if(snapshot.value != null){
+                    if (snapshot.value != null) {
                         val favorites = (snapshot.value as HashMap<String, String>).values.map {
                             Gson().fromJson(it, FavoriteRestaurant::class.java).toRestaurant()
                         }
                         completableFuture.complete(favorites)
-                    }else {
+                    } else {
                         completableFuture.complete(emptyList())
                     }
                 }.addOnFailureListener {
@@ -42,11 +42,16 @@ class FirebaseService {
     }
 
     fun addFavorite(favoriteRestaurant: FavoriteRestaurant): CompletableFuture<String?>? {
-        if(userId != null){
-            val newData = database.getReference("favorites").child(userId!!).child(favoriteRestaurant._id)
+        if (userId != null) {
+            val newData =
+                database.getReference("favorites").child(userId!!).child(favoriteRestaurant._id)
             val completableFuture = CompletableFuture<String?>()
             newData.setValue(Gson().toJson(favoriteRestaurant)).addOnCompleteListener {
-                completableFuture.complete(if(it.isSuccessful) {newData.key} else null)
+                completableFuture.complete(
+                    if (it.isSuccessful) {
+                        newData.key
+                    } else null
+                )
             }
             return completableFuture
         }
@@ -54,8 +59,8 @@ class FirebaseService {
     }
 
     fun removeFavorite(restaurantId: String): CompletableFuture<String>? {
-        if(userId != null){
-            val completableFuture =  CompletableFuture<String>()
+        if (userId != null) {
+            val completableFuture = CompletableFuture<String>()
             database.getReference("favorites")
                 .child(userId!!)
                 .child(restaurantId)
@@ -70,12 +75,16 @@ class FirebaseService {
 
     fun getReviews(restaurantId: String): CompletableFuture<List<RestaurantReview>> {
         val future = CompletableFuture<List<RestaurantReview>>()
-        database.getReference("reviews").child(restaurantId).get().addOnCompleteListener {
-            if(it.isSuccessful){
-
+        database.getReference("reviews").child(restaurantId).get()
+            .addOnSuccessListener {
+                val reviews = (it.value as HashMap<String, String>).values.map { reviewJson ->
+                    Gson().fromJson(reviewJson, RestaurantReview::class.java)
+                }
+                future.complete(reviews)
             }
-            future.complete(emptyList())
-        }
+            .addOnFailureListener {
+                future.complete(emptyList())
+            }
         return future
     }
 
@@ -83,8 +92,12 @@ class FirebaseService {
         val future = CompletableFuture<String>()
         val reference = database.getReference("reviews").child(restaurantId)
         val newData = reference.push()
-        newData.setValue(review).addOnCompleteListener {
-            future.complete(if(it.isSuccessful) {newData.key} else null)
+        newData.setValue(Gson().toJson(review)).addOnCompleteListener {
+            future.complete(
+                if (it.isSuccessful) {
+                    newData.key
+                } else null
+            )
         }
         return future
     }

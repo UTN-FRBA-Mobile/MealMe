@@ -10,7 +10,12 @@ class ReviewController {
 
     fun getReviewsForRestaurant(restaurantId: String): CompletableFuture<List<RestaurantReview>> {
         val future = CompletableFuture<List<RestaurantReview>>()
+        firebase.getReviews(restaurantId).thenApply {
+            _reviewsPerRestaurant.put(restaurantId, it)
+            future.complete(it)
 
+            it
+        }
         return future
     }
 
