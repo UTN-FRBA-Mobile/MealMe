@@ -38,6 +38,28 @@ class RestaurantController {
         return future
     }
 
+    fun fetchByGeolocation(latitude: Double, longitude: Double): CompletableFuture<List<Restaurant>> {
+        val future = CompletableFuture<List<Restaurant>>()
+        service.listRestaurantsByGeo(latitude, longitude).enqueue(object : Callback<ResponseApiModel> {
+            override fun onResponse(
+                call: Call<ResponseApiModel>,
+                response: Response<ResponseApiModel>
+            ) {
+                if(response.isSuccessful){
+                    _restaurants.postValue(response.body()?.restaurants)
+                    future.complete(response.body()?.restaurants)
+                }else {
+                    future.complete(emptyList())
+                }
+            }
+            override fun onFailure(call: Call<ResponseApiModel>, t: Throwable) {
+                future.complete(emptyList())
+            }
+        })
+
+        return future
+    }
+
     companion object {
         val instance = RestaurantController()
     }

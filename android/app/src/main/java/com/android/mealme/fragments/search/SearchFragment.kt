@@ -36,16 +36,16 @@ class SearchFragment : Fragment() {
             val imm: InputMethodManager =
                 requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(requireView().windowToken, 0)
-            if(binding.addressSearch?.editText?.text.toString().isNullOrEmpty() &&
-                    binding.nameSearch?.editText?.text.toString().isNullOrEmpty()){
+            if(binding.address.editText?.text.toString().isNullOrEmpty() &&
+                    binding.editTextTextPersonName.text.toString().isNullOrEmpty()){
                 Snackbar.make(activity?.findViewById(R.id.busquedaLayout)!!,
                     resources.getString(R.string.errorAddress), Snackbar.LENGTH_LONG)
                     .show();
             }else{
-                if(!binding.addressSearch?.editText?.text.toString().isNullOrEmpty()){
-                    searchByAddress(binding.addressSearch?.editText?.text.toString())
+                if(!binding.address.editText?.text.toString().isNullOrEmpty()){
+                    searchByAddress(binding.address.editText?.text.toString())
                 }else{
-                    searchByName(binding.nameSearch?.editText?.text.toString())
+                    searchByName(binding.editTextTextPersonName.text.toString())
                 }
             }
         }

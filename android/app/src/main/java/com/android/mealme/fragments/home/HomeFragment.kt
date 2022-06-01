@@ -1,10 +1,15 @@
 package com.android.mealme.fragments.home
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -15,6 +20,7 @@ import com.android.mealme.R
 import com.android.mealme.data.adapter.RestaurantAdapter
 import com.android.mealme.data.adapter.RestaurantAdapterListener
 import com.android.mealme.data.model.Restaurant
+import com.android.mealme.data.utils.Permissions
 import com.android.mealme.databinding.FragmentHomeBinding
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.serialization.encodeToString
@@ -34,12 +40,6 @@ class HomeFragment : Fragment() {
             }
             findNavController().navigate(R.id.action_nav_home_to_restaurantDetailFragment,bundle)
         }
-    }
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-//        homeViewModel.getRestaurants()
     }
 
     override fun onCreateView(

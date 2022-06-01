@@ -35,21 +35,14 @@ class HomeViewModel : ViewModel() {
         binding: FragmentHomeBinding
     ) {
         isLoading.value = true
-        service.listRestaurantsByGeo(latitude,longitude).enqueue(object: Callback<ResponseApiModel> {
-            override fun onResponse(call: Call<ResponseApiModel>, response: Response<ResponseApiModel>) {
-                isLoading.value = false
-                if (response.isSuccessful){
-                    response.body()?.restaurants?.let {
-                        restaurants.value = it
-                        binding.buttonClose.visibility = View.VISIBLE
-                        binding.buttonAll.visibility = View.VISIBLE
-                    }
-                }
-            }
-            override fun onFailure(call: Call<ResponseApiModel>, error: Throwable) {
-                isLoading.value = false
-            }
-        })
+        RestaurantController.instance.fetchByGeolocation(latitude, longitude).thenApply {
+            isLoading.value = false
+            restaurants.value = it
+            binding.buttonClose.visibility = View.VISIBLE
+            binding.buttonAll.visibility = View.VISIBLE
+
+            it
+        }
     }
 
     fun getRestaurantByName(
@@ -57,20 +50,11 @@ class HomeViewModel : ViewModel() {
         binding: FragmentHomeBinding
     ) {
         isLoading.value = true
-        service.listRestaurants().enqueue(object: Callback<ResponseApiModel> {
-            override fun onResponse(call: Call<ResponseApiModel>, response: Response<ResponseApiModel>) {
-                isLoading.value = false
-                if (response.isSuccessful){
-                        restaurants.value = listOf(response.body()?.restaurants!![9])
-
-                        binding.buttonClose.visibility = View.VISIBLE
-                        binding.buttonAll.visibility = View.VISIBLE
-                }
-            }
-            override fun onFailure(call: Call<ResponseApiModel>, error: Throwable) {
-                isLoading.value = false
-            }
-        })
+        RestaurantController.instance.fetchRestaurants().thenApply {
+            restaurants.value = it
+            binding.buttonClose.visibility = View.VISIBLE
+            binding.buttonAll.visibility = View.VISIBLE
+        }
     }
 
     fun cleanRestaurants() {
