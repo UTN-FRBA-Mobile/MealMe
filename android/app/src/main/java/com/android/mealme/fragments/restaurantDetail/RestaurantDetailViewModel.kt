@@ -61,7 +61,8 @@ class RestaurantDetailViewModel : ViewModel() {
 
     fun addFavorite() {
         isFavorite.value = true
-        FavoriteController.instance.addFavorite(restaurant?._id!!)?.thenApply {
+        val fav = restaurant?.toFavorite()!!
+        FavoriteController.instance.addFavorite(fav)?.thenApply {
             isFavorite.value = it
         }
     }
@@ -70,7 +71,7 @@ class RestaurantDetailViewModel : ViewModel() {
     fun removeFavorite() {
         isFavorite.value = false
         FavoriteController.instance.removeFavorite(restaurant?._id!!)?.thenApply {
-            isFavorite.value = !it
+            isFavorite.value = it.isNullOrEmpty()
         }
     }
 

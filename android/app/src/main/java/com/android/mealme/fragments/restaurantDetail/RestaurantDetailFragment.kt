@@ -18,6 +18,7 @@ import com.android.mealme.ui.RestaurantHeaderImage
 import com.android.mealme.utils.numberUtils
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.auth.FirebaseAuth
 
 class RestaurantDetailFragment : Fragment() {
 
@@ -109,7 +110,7 @@ class RestaurantDetailFragment : Fragment() {
 
         val favoriteButton = toolbar.menu?.findItem(R.id.detail_menu_favorite)
         FavoriteController.instance.isLoading.observe(activity as MainActivity) {
-            favoriteButton?.isVisible = !it
+            favoriteButton?.isVisible = FirebaseAuth.getInstance().currentUser != null && !it
         }
         // Set favorite press listener
         viewModel.isFavorite.observe(activity as MainActivity) { isFavorite ->
