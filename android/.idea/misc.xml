@@ -50,11 +50,13 @@
         <entry key="app/src/main/res/layout/fragment_register.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/fragment_restaurant_detail.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/fragment_review.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/fragment_review_list.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/fragment_status_update.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/item_footer.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/item_image.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/item_menu.xml" value="0.33" />
         <entry key="app/src/main/res/layout/item_restaurant.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/item_review.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/item_simple.xml" value="0.19479166666666667" />
         <entry key="app/src/main/res/layout/nav_header_main.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/restaurant_image_header.xml" value="0.37604166666666666" />
