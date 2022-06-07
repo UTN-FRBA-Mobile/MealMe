@@ -1,10 +1,11 @@
 package com.android.mealme.fragments.restaurantDetail
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
-import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.android.mealme.MainActivity
@@ -16,11 +17,18 @@ import com.android.mealme.data.model.RestaurantCategory
 import com.android.mealme.databinding.FragmentRestaurantDetailBinding
 import com.android.mealme.ui.RestaurantHeaderImage
 import com.android.mealme.utils.numberUtils
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 
-class RestaurantDetailFragment : Fragment() {
+
+class RestaurantDetailFragment : Fragment(), OnMapReadyCallback {
 
     private var _binding: FragmentRestaurantDetailBinding? = null
     private val binding get() = _binding!!
@@ -28,10 +36,12 @@ class RestaurantDetailFragment : Fragment() {
     private val viewModel: RestaurantDetailViewModel by viewModels()
 
     private lateinit var menuViewPagerAdapter: MenutabAdapter
+    private lateinit var mMap: GoogleMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.setRestaurant(arguments?.getSerializable("RESTAURANT") as Restaurant)
+
     }
 
     override fun onCreateView(
@@ -75,6 +85,8 @@ class RestaurantDetailFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         (activity as AppCompatActivity).supportActionBar?.hide()
+        setupMap()
+
     }
 
     override fun onStop() {
@@ -138,6 +150,45 @@ class RestaurantDetailFragment : Fragment() {
             true
         }
 
+    }
+
+    private fun setupMap() {
+        try {
+            val mapFragment: SupportMapFragment = SupportMapFragment.newInstance()
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.add(R.id.restaurant_detail_map, mapFragment)?.disallowAddToBackStack()
+                ?.commit()
+
+            mapFragment.getMapAsync(this)
+        } catch (e: Exception) {
+            // TODO: handle mpa error
+            Log.i("Test", "Map error ${e.message}")
+        }
+    }
+
+    private fun focusMarker(latLng: LatLng){
+        val center = CameraUpdateFactory.newLatLng(latLng)
+        val zoom = CameraUpdateFactory.zoomTo(15f)
+
+        mMap.moveCamera(center)
+        mMap.animateCamera(zoom)
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+
+        val position = LatLng(
+            viewModel.restaurant?.address?.lat?.toDouble()!!,
+            viewModel.restaurant?.address?.lon?.toDouble()!!,
+        )
+
+        mMap.addMarker(
+            MarkerOptions()
+                .position(position)
+                .title(viewModel.restaurant?.name)
+        )
+        focusMarker(position)
+//        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 15.0f));
     }
 
     private fun addViewModelObservers() {
