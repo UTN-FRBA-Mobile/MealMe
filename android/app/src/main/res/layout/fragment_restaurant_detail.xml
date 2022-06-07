@@ -45,23 +45,29 @@
                     android:textColor="?attr/colorPrimaryVariant" />
             </LinearLayout>
 
-            <RelativeLayout
+            <androidx.cardview.widget.CardView
                 android:id="@+id/restaurant_detail_map_container"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginVertical="26dp"
-                android:background="@color/white"
-                android:padding="16dp"
+                android:layout_marginHorizontal="16dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/restaurant_detail_rating_container">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="Mapa" />
-            </RelativeLayout>
+                app:layout_constraintTop_toBottomOf="@id/restaurant_detail_rating_container"
+                android:elevation="2dp"
+                app:cardCornerRadius="10dp"
+                android:backgroundTint="@color/lightGray"
+                >
+                <FrameLayout
+                    android:id="@+id/restaurant_detail_map"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:longClickable="false"
+                    />
+            </androidx.cardview.widget.CardView>
 
 
             <com.google.android.material.tabs.TabLayout
