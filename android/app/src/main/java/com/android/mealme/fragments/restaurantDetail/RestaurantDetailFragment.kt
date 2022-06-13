@@ -177,6 +177,8 @@ class RestaurantDetailFragment : Fragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
+        mMap.uiSettings.setAllGesturesEnabled(false)
+
         val position = LatLng(
             viewModel.restaurant?.address?.lat?.toDouble()!!,
             viewModel.restaurant?.address?.lon?.toDouble()!!,
