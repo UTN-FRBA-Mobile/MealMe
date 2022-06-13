@@ -40,12 +40,14 @@
     <string name="errorFieldsRegister">Hay que llenar todos los campos para registrarse</string>
 
     <!-- SEARCH STRINGS -->
-    <string name="searchByGeo">Buscar por Ubicación</string>
-    <string name="searchByAddress">Buscar por Dirección</string>
+    <string name="msgSearch">Buscar por Nombre o Dirección</string>
+    <string name="nameLabel">Nombre</string>
     <string name="addressLabel">Dirección</string>
     <string name="errorAddress">Ingrese una dirección válida</string>
     <string name="msgPermission">(Requiere permisos de geolocalización)</string>
     <string name="permissionTitle">Dar acceso a la ubicación</string>
+    <string name="search">Buscar</string>
+
 
     <!--  RESTAURANT DETAIL STRING  -->
     <string name="add_review">"Agregar reseña"</string>

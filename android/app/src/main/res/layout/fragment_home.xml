@@ -29,15 +29,6 @@
         android:text="@string/button_all"
         android:textSize="12sp" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:indeterminate="true"
-        style="@android:style/Widget.Material.ProgressBar.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-       android:visibility="gone"
-        tools:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
@@ -52,5 +43,15 @@
         tools:layoutManager="LinearLayoutManager"
         tools:listitem="@layout/item_restaurant" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@android:style/Widget.Material.ProgressBar.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:layout_centerInParent="true"/>
 
 </RelativeLayout>

@@ -50,10 +50,11 @@ class HomeViewModel : ViewModel() {
         binding: FragmentHomeBinding
     ) {
         isLoading.value = true
-        RestaurantController.instance.fetchRestaurants().thenApply {
+        RestaurantController.instance.fetchByName(name).thenApply {
             restaurants.value = it
             binding.buttonClose.visibility = View.VISIBLE
             binding.buttonAll.visibility = View.VISIBLE
+            isLoading.value = false
         }
     }
 
