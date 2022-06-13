@@ -1,10 +1,14 @@
 package com.android.mealme.fragments.register
 
 import android.content.Context
-import android.widget.Toast
+import android.content.res.Resources
+import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.android.mealme.R
 import com.google.android.gms.tasks.Task
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -26,7 +30,7 @@ class RegisterViewModel : ViewModel() {
         repeatPassword.value = text
     }
 
-    fun register(ctx: Context): Task<AuthResult>? {
+    fun register(view: View, resources: Resources, ctx: Context): Task<AuthResult>? {
         isLoading.value = false
         val _email = email.value
         val _passowrd = password.value
@@ -37,11 +41,17 @@ class RegisterViewModel : ViewModel() {
                     isLoading.value = false
                 }
                 .addOnFailureListener {
-                    Toast.makeText(ctx, "Ocurrió un error al realizar el registro del usuario", Toast.LENGTH_LONG).show()
+                    Snackbar.make(
+                        view,
+                        resources.getString(R.string.errorRegister), Snackbar.LENGTH_LONG)
+                        .show();
                 }
         }
 
-        Toast.makeText(ctx, "Hay que llenar todos los campos para registrarse", Toast.LENGTH_LONG).show()
+        Snackbar.make(
+            view,
+            resources.getString(R.string.errorFieldsRegister), Snackbar.LENGTH_LONG)
+            .show();
         return null
     }
 
