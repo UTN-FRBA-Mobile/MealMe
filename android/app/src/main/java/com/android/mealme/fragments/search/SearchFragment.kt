@@ -7,11 +7,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavOptions
+import androidx.navigation.NavOptionsBuilder
+import androidx.navigation.Navigator
 import androidx.navigation.fragment.findNavController
 import com.android.mealme.R
 import com.android.mealme.databinding.FragmentSearchBinding
+import com.android.mealme.fragments.home.HomeFragment
 import com.google.android.material.snackbar.Snackbar
 import java.io.IOException
 
@@ -20,75 +26,60 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
 
     private val binding get() = _binding!!
+    private val viewModel: SearchViewModel by viewModels()
+    private lateinit var inputMethodManager: InputMethodManager
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val galleryViewModel =
-            ViewModelProvider(this).get(SearchViewModel::class.java)
-
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
-        val root: View = binding.root
 
-        binding.searchByAddress.setOnClickListener(){
-            val imm: InputMethodManager =
-                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(requireView().windowToken, 0)
-            if(binding.addressSearch?.editText?.text.toString().isNullOrEmpty() &&
-                binding.nameSearch?.editText?.text.toString().isNullOrEmpty()){
-                Snackbar.make(activity?.findViewById(R.id.busquedaLayout)!!,
-                    resources.getString(R.string.errorAddress), Snackbar.LENGTH_LONG)
-                    .show();
-            }else{
-                if(!binding.addressSearch?.editText?.text.toString().isNullOrEmpty()){
-                    searchByAddress(binding.addressSearch?.editText?.text.toString())
-                }else{
-                    searchByName(binding.nameSearch?.editText?.text.toString())
-                }
+        inputMethodManager =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+        binding.addressSearch.editText?.doAfterTextChanged {
+            viewModel.setAddress(it.toString())
+        }
+        binding.nameSearch.editText?.doAfterTextChanged {
+            viewModel.setName(it.toString())
+        }
+
+        binding.searchByAddress.setOnClickListener() {
+            inputMethodManager.hideSoftInputFromWindow(requireView().windowToken, 0)
+
+            if (viewModel.address.isNullOrEmpty() && viewModel.name.isNullOrEmpty()) {
+                binding.addressSearch.isErrorEnabled = true
+                binding.nameSearch.isErrorEnabled = true
+
+                Snackbar.make(
+                    activity?.findViewById(R.id.busquedaLayout)!!,
+                    resources.getString(R.string.errorAddress), Snackbar.LENGTH_LONG
+                ).show()
+
+            } else {
+                searchFromEnteredValues()
             }
         }
 
-        return root
+
+        return binding.root
     }
 
-    private fun searchByName(toString: String) {
+    private fun searchFromEnteredValues() {
         val bundle = Bundle().apply {
-            putSerializable("filtroName", true)
-            putSerializable("name", toString)
+            putString(HomeFragment.HOME_SEARCH_NAME, viewModel.name)
+            putString(HomeFragment.HOME_SEARCH_ADDRESS, viewModel.address)
         }
-        findNavController().navigate(R.id.action_nav_search_to_nav_home,bundle)
 
+        findNavController().navigate(R.id.action_nav_search_to_nav_home, bundle)
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-
-    fun searchByAddress(strAddress: String?) {
-        val coder = Geocoder(requireContext())
-        val address: List<Address>?
-        try {
-            address = coder.getFromLocationName(strAddress, 5)
-            if (address == null || address.isEmpty()) {
-                Snackbar.make(activity?.findViewById(R.id.busquedaLayout)!!,
-                    resources.getString(R.string.errorAddress), Snackbar.LENGTH_LONG)
-                    .show();
-            }else{
-                val location: Address = address[0]
-
-                val bundle = Bundle().apply {
-                    putSerializable("filtroGeo", true)
-                    putSerializable("latitud", location.latitude)
-                    putSerializable("longitud", location.longitude)
-                }
-                findNavController().navigate(R.id.action_nav_search_to_nav_home,bundle)
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
     }
 }

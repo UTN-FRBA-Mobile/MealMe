@@ -10,7 +10,7 @@ import com.android.mealme.R
 
 object Permissions {
 
-    private fun hasPermissions(context: Context, permissionCode: String): Boolean {
+     fun hasPermissions(context: Context, permissionCode: String): Boolean {
         return ContextCompat.checkSelfPermission(context, permissionCode) == PackageManager.PERMISSION_GRANTED
     }
 

@@ -15,6 +15,11 @@
     <string name="menu_detail">Detalle</string>
     <string name="button_close">Restaurantes Cercanos</string>
     <string name="button_all">Ver Todo</string>
+
+    <!--  HOME PERMISSION REJECTED  -->
+    <string name="ask_permissions">Otorgar permisos</string>
+    <string name="we_need_permissions">Necesitamos permisos para poder mostrarte los restaurantes cercanos</string>
+
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Contraseña</string>
@@ -43,7 +48,7 @@
     <string name="msgSearch">Buscar por Nombre o Dirección</string>
     <string name="nameLabel">Nombre</string>
     <string name="addressLabel">Dirección</string>
-    <string name="errorAddress">Ingrese una dirección válida</string>
+    <string name="errorAddress">Debe ingresar por lo menos el nombre o la dirección (o ambos)</string>
     <string name="msgPermission">(Requiere permisos de geolocalización)</string>
     <string name="permissionTitle">Dar acceso a la ubicación</string>
     <string name="search">Buscar</string>
