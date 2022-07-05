@@ -38,9 +38,9 @@ class RestaurantController {
         return future
     }
 
-    fun fetchByName(name: String): CompletableFuture<List<Restaurant>> {
+    fun fetchByNameOrAddress(name: String?, address: String?): CompletableFuture<List<Restaurant>> {
         val future = CompletableFuture<List<Restaurant>>()
-        service.listRestaurantsByName(name).enqueue(object : Callback<ResponseApiModel> {
+        service.listRestaurantsByName(name, address).enqueue(object : Callback<ResponseApiModel> {
             override fun onResponse(
                 call: Call<ResponseApiModel>,
                 response: Response<ResponseApiModel>

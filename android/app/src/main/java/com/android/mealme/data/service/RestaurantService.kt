@@ -18,5 +18,5 @@ interface RestaurantService {
     fun listRestaurantsByGeo(@Query("latitude")latitude: Double, @Query("longitude")longitude: Double): Call<ResponseApiModel>
 
     @GET("eaa7e2aa-8bd6-4954-b7cb-0b166862c529")
-    fun listRestaurantsByName(@Query("name")name:String): Call<ResponseApiModel>
+    fun listRestaurantsByName(@Query("name")name:String?, @Query("address") address: String?): Call<ResponseApiModel>
 }

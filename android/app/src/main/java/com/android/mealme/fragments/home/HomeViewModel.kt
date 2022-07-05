@@ -32,28 +32,21 @@ class HomeViewModel : ViewModel() {
     fun getRestaurantsByGeoLocation(
         latitude: Double,
         longitude: Double,
-        binding: FragmentHomeBinding
     ) {
         isLoading.value = true
         RestaurantController.instance.fetchByGeolocation(latitude, longitude).thenApply {
             isLoading.value = false
             restaurants.value = it
-            binding.buttonClose.visibility = View.VISIBLE
-            binding.buttonAll.visibility = View.VISIBLE
 
             it
         }
     }
 
-    fun getRestaurantByName(
-        name: String,
-        binding: FragmentHomeBinding
-    ) {
+    fun getRestaurantsByNameAndAddress(name: String?, address:String?){
+        cleanRestaurants()
         isLoading.value = true
-        RestaurantController.instance.fetchByName(name).thenApply {
+        RestaurantController.instance.fetchByNameOrAddress(name, address).thenApply {
             restaurants.value = it
-            binding.buttonClose.visibility = View.VISIBLE
-            binding.buttonAll.visibility = View.VISIBLE
             isLoading.value = false
         }
     }

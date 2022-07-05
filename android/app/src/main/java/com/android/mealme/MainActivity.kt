@@ -1,6 +1,7 @@
 package com.android.mealme
 
 import android.os.Bundle
+import android.os.Handler
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
@@ -8,12 +9,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigator
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
+import androidx.navigation.ui.*
 import com.android.mealme.data.controller.FavoriteController
 import com.android.mealme.databinding.ActivityMainBinding
+import com.android.mealme.fragments.home.HomeFragment
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 
@@ -45,7 +44,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 navViewMenu.findItem(R.id.nav_logout).setVisible(isLoggedIn)
                 navViewMenu.findItem(R.id.nav_login).setVisible(!isLoggedIn)
             }
-            
+
             if (isLoggedIn) {
                 FavoriteController.instance.getFavorites()
             }
@@ -55,9 +54,11 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setupNavigation()
+    }
 
+    private fun setupNavigation() {
         setSupportActionBar(binding.appBarMain.toolbar)
-
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(NAV_CONTROLLER_ID)
@@ -66,10 +67,16 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.nav_home, R.id.nav_search, R.id.nav_favorite), drawerLayout
+            setOf(
+                R.id.nav_home
+            ), drawerLayout
         )
 
-        setupActionBarWithNavController(navController, appBarConfiguration)
+        NavigationUI.setupWithNavController(
+            binding.appBarMain.toolbar,
+            navController,
+            appBarConfiguration
+        )
         navView.setupWithNavController(navController)
 
         navView.menu.findItem(R.id.nav_home)?.setChecked(true)
@@ -81,7 +88,21 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
             true
         }
+        setupHomeMenu()
     }
+
+    private fun setupHomeMenu(id: Int = R.drawable.ic_menu) {
+        Handler().postDelayed({
+            binding.appBarMain.toolbar.navigationIcon = getDrawable(id)
+            binding.appBarMain.toolbar.setNavigationOnClickListener {
+                when (id) {
+                    R.drawable.ic_menu -> binding.drawerLayout.open()
+                    R.drawable.ic_arrow_back -> onBackPressed()
+                }
+            }
+        }, 0)
+    }
+
 
     override fun onStart() {
         super.onStart()
@@ -92,11 +113,6 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     override fun onPause() {
         super.onPause()
         FirebaseAuth.getInstance().removeAuthStateListener(firebaseAuthStateListener)
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(NAV_CONTROLLER_ID)
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
     private var previousDestinationClassName: String = ""
@@ -112,6 +128,19 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             )
         ) {
             firebaseAuthStateListener.onAuthStateChanged(FirebaseAuth.getInstance())
+        }
+        when (destinationClassName) {
+            "com.android.mealme.fragments.home.HomeFragment" -> {
+                val name = arguments?.getString(HomeFragment.HOME_SEARCH_NAME, "")
+                val address = arguments?.getString(HomeFragment.HOME_SEARCH_ADDRESS, "")
+                val hasSearch = name?.isNotEmpty() ?: false || address?.isNotEmpty() ?: false
+                if (hasSearch) {
+                    setupHomeMenu(R.drawable.ic_arrow_back)
+                } else {
+                    setupHomeMenu()
+                }
+            }
+            else -> setupHomeMenu(R.drawable.ic_arrow_back)
         }
         previousDestinationClassName = destinationClassName
     }

@@ -4,10 +4,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class SearchViewModel : ViewModel() {
-    private val address = MutableLiveData<String>()
+    private val _address: MutableLiveData<String> = MutableLiveData("")
+    private val _name: MutableLiveData<String> = MutableLiveData("")
 
-    fun setAddress(text:String){
-        address.value = text
+    val address: String get() = _address.value ?: ""
+    val name: String get() = _name.value ?: ""
+
+    fun setAddress(text: String) {
+        this._address.value = text
+    }
+
+    fun setName(text: String){
+        this._name.value = text
     }
 
 }
