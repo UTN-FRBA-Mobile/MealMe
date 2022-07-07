@@ -155,8 +155,8 @@ class HomeFragment : Fragment() {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // tenemos permiso, continuar con la tarea
                     homeViewModel.cleanRestaurants()
-                    getLocationAndSearch()
                     hasLocationPermissions.value = true
+                    getLocationAndSearch()
                     binding.homeEmptyListContainer.visibility = View.GONE
                 } else {
                     homeViewModel.getRestaurants()
