@@ -18,10 +18,9 @@ object RetrofitClient {
 
 
         return Retrofit.Builder()
-            .baseUrl("https://run.mocky.io/v3/")
+            .baseUrl("https://eon3jinkad9ogpb.m.pipedream.net")
             .addConverterFactory(GsonConverterFactory.create())
             .client(mOkHttpClient)
             .build()
     }
-
 }
