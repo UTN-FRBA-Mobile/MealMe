@@ -126,8 +126,14 @@ class HomeFragment : Fragment() {
         if (name != null || address != null) {
             binding.homeEmptyListContainer.visibility = View.GONE
             homeViewModel.getRestaurantsByNameAndAddress(name, address)
+            binding.homeTitle.visibility = View.VISIBLE
+            var leyend : String = "Resultados de la busqueda:"
+            if(!name.isNullOrEmpty()) leyend += "\n Nombre: $name"
+            if(!address.isNullOrEmpty()) leyend += "\n Direccion: $address"
+            binding.homeTitle.text = leyend
         } else if (hasLocationPermissions.value == true) {
             binding.homeEmptyListContainer.visibility = View.GONE
+            binding.homeTitle.visibility = View.GONE
             getLocationAndSearch()
         } else {
             binding.homeEmptyListContainer.visibility = View.VISIBLE

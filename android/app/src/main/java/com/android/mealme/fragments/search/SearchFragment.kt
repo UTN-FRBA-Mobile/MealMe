@@ -37,6 +37,9 @@ class SearchFragment : Fragment() {
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
 
+        binding.nameSearch.editText?.setText(viewModel.name)
+        binding.addressSearch.editText?.setText(viewModel.address)
+
         inputMethodManager =
             requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
@@ -82,4 +85,5 @@ class SearchFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }
