@@ -47,7 +47,10 @@ class MenuItemsAdapter: RecyclerView.Adapter<MenuItemsAdapter.ViewHolder>() {
     private fun calculatePrice(customizations: List<MenuItemCustomization>): CharSequence? {
         var price: Number = 0
 
-        price = findFirstValueNotNull(customizations[0].options, 0)
+        if(customizations.isNotEmpty()){
+            price = findFirstValueNotNull(customizations[0].options, 0)
+        }
+
 
         if(price != 0){
             if(price.toString().length > 3){
@@ -56,7 +59,7 @@ class MenuItemsAdapter: RecyclerView.Adapter<MenuItemsAdapter.ViewHolder>() {
                 return "$" + price.toString().subSequence(0,1) + "," +   price.toString().subSequence(1,price.toString().length)
             }
         }else
-            return "0"
+            return "$0"
 
     }
 
@@ -66,7 +69,12 @@ class MenuItemsAdapter: RecyclerView.Adapter<MenuItemsAdapter.ViewHolder>() {
         }else if(options.getOrNull(i+1) != null){
             findFirstValueNotNull(options, i+1)
         }else{
-            findFirstValueNotNull(options[0].customizations[0].options,0)
+            if(options[0].customizations.isNotEmpty()){
+                findFirstValueNotNull(options[0].customizations[0].options,0)
+            }else{
+                0
+            }
+
         }
     }
 

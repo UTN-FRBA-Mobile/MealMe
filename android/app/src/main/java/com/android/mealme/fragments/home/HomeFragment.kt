@@ -72,22 +72,25 @@ class HomeFragment : Fragment() {
         }
 
         binding.homeSearchButton.setOnClickListener() {
-            val navController = findNavController()
-            val options =
-                NavOptions.Builder()
-                    .setPopUpTo(navController.currentDestination?.id!!, true)
-                    .setLaunchSingleTop(false)
-                    .build()
-            navController.navigate(
-                R.id.action_nav_home_to_nav_search,
-                null,
-                navOptions {
-                    restoreState = true
-                    popUpTo(navController.currentDestination?.id!!){
-                        saveState = true
+            val name: String = arguments?.getString(HOME_SEARCH_NAME, "") ?: ""
+            val address: String = arguments?.getString(HOME_SEARCH_ADDRESS, "") ?: ""
+
+            if ((name.isNotEmpty() || address.isNotEmpty()) && restaurantAdapter.itemCount == 0) {
+                activity?.onBackPressed()
+            } else {
+                val navController = findNavController()
+                navController.navigate(
+                    R.id.action_nav_home_to_nav_search,
+                    null,
+                    navOptions {
+                        restoreState = true
+                        popUpTo(navController.currentDestination?.id!!) {
+                            saveState = true
+                        }
                     }
-                }
-            )
+                )
+            }
+
         }
 
         requireActivity().invalidateOptionsMenu()
@@ -110,6 +113,22 @@ class HomeFragment : Fragment() {
 
         }
         homeViewModel.restaurants.observe(activity as MainActivity) {
+            val loading: Boolean = homeViewModel.isLoading.value?.or(false) ?: false
+            if (!loading && it.isEmpty()) {
+                binding.homeEmptyListContainer.visibility = View.VISIBLE
+                binding.homeEmptyListTitle.text = "No pudimos obtener restaurantes para tu búsqueda"
+
+                val name = arguments?.getString(HOME_SEARCH_NAME, "") ?: ""
+                val address = arguments?.getString(HOME_SEARCH_ADDRESS, "") ?: ""
+                if (name.isNotBlank() || address.isNotBlank()) {
+                    binding.homeAskPermissionsButton.visibility = View.GONE
+                    binding.homeSearchButton.text = "Volver a buscar"
+                }
+
+
+            } else {
+                binding.homeEmptyListContainer.visibility = View.GONE
+            }
             restaurantAdapter.setRestaurants(it)
         }
     }
@@ -127,9 +146,9 @@ class HomeFragment : Fragment() {
             binding.homeEmptyListContainer.visibility = View.GONE
             homeViewModel.getRestaurantsByNameAndAddress(name, address)
             binding.homeTitle.visibility = View.VISIBLE
-            var leyend : String = "Resultados de la busqueda:"
-            if(!name.isNullOrEmpty()) leyend += "\n Nombre: $name"
-            if(!address.isNullOrEmpty()) leyend += "\n Direccion: $address"
+            var leyend: String = "Resultados de la busqueda:"
+            if (!name.isNullOrEmpty()) leyend += "\n Nombre: $name"
+            if (!address.isNullOrEmpty()) leyend += "\n Direccion: $address"
             binding.homeTitle.text = leyend
         } else if (hasLocationPermissions.value == true) {
             binding.homeEmptyListContainer.visibility = View.GONE
@@ -191,6 +210,7 @@ class HomeFragment : Fragment() {
                 } else {
                     binding.homeEmptyListContainer.visibility = View.VISIBLE
                     binding.homeEmptyListTitle.text = "No pudimos obtener tu ubicación"
+                    binding.homeSearchButton.text = "Buscar Restaurantes"
                     binding.homeAskPermissionsButton.visibility = View.GONE
                 }
             }

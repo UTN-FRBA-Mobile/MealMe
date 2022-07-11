@@ -46,8 +46,8 @@ class HomeViewModel : ViewModel() {
         cleanRestaurants()
         isLoading.value = true
         RestaurantController.instance.fetchByNameOrAddress(name, address).thenApply {
-            restaurants.value = it
             isLoading.value = false
+            restaurants.value = it
         }
     }
 
